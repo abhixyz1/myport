@@ -86,13 +86,13 @@ export const tourSteps: TourStep[] = [
     content: (
       <>
         <p className="mb-4 text-sm">The code for this entire project is open-source. For details or to contribute, please visit the repository.</p>
-        <a href="https://github.com/akshay-abraham/Quantalink" target="_blank" rel="noopener noreferrer">
+        <a href="https://github.com/abhixyz1" target="_blank" rel="noopener noreferrer">
           <Button variant="outline" className="w-full">
             <Github className="mr-2 h-4 w-4" />
             View on GitHub
           </Button>
         </a>
-        <p className="text-xs text-foreground/50 text-center mt-3">Copyright © Akshay Abraham</p>
+        <p className="text-xs text-foreground/50 text-center mt-3">Copyright © M Abhinaya</p>
       </>
     ),
   }

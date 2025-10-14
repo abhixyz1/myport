@@ -16,11 +16,11 @@ import { LinkedinIcon } from './icons/linkedin';
 
 // An array of link objects, defining the properties for each card.
 const links = [
-  { href: 'https://www.linkedin.com/in/akshayabraham37/', title: 'LinkedIn', Icon: LinkedinIcon },
-  { href: 'https://www.instagram.com/akshay.abraham/', title: 'Instagram', Icon: InstagramIcon },
-  { href: 'https://github.com/akshay-abraham/', title: 'GitHub', Icon: GithubIcon },
-  { href: 'https://wa.me/919946141445', title: 'WhatsApp', Icon: WhatsappIcon },
-  { href: 'mailto:akshaykroobenabraham@gmail.com', title: 'Mail', Icon: MailIcon },
+  { href: 'https://www.linkedin.com/in/m-abhinaya-zurfa-683b9a248/', title: 'LinkedIn', Icon: LinkedinIcon },
+  { href: 'https://www.instagram.com/m_abhinayaa/', title: 'Instagram', Icon: InstagramIcon },
+  { href: 'https://github.com/abhixyz1/', title: 'GitHub', Icon: GithubIcon },
+  { href: 'https://wa.me/6285338364410', title: 'WhatsApp', Icon: WhatsappIcon },
+  { href: 'mailto:abhinayazrf@gmail.com', title: 'Mail', Icon: MailIcon },
 ];
 
 /**

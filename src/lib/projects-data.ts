@@ -24,29 +24,29 @@ export interface Project {
  */
 export const projects: Project[] = [
   // To feature a project on the home page, set `isFeatured: true`.
-  {
-    title: 'NEPHRA - Smart Water Bottle System',
-    description:
-      'A smart water bottle system with ESP32, copper tape sensor, and MPU6050, featuring mobile app integration, hydration tracking, and cloud AI analytics.',
-    githubUrl: 'https://github.com/akshay-abraham/NEPHRA',
-    license: 'MIT License',
-    isFeatured: true,
-  },
-  {
-    title: 'Quantalink',
-    description:
-      'A minimal, responsive Linktree-style web app built with Next.js and TypeScript, featuring customizable links, a QED-inspired animated background, and a clean UI — deployed on Vercel.',
-    githubUrl: 'https://github.com/akshay-abraham/Quantalink',
-    license: 'GPL v3',
-    isFeatured: true,
-  },
-  {
-    title: 'MSEdge Redirect Logo Redesign',
-    description: 'Contributed a redesigned logo for the open-source MSEdge Redirect tool, improving visual branding and user recognition.',
-    githubUrl: 'https://github.com/rcmaehl/MSEdgeRedirect/issues/517',
-    license: 'LGPL-3.0',
-    isContribution: true
-  },
+  // {
+  //   title: 'NEPHRA - Smart Water Bottle System',
+  //   description:
+  //     'A smart water bottle system with ESP32, copper tape sensor, and MPU6050, featuring mobile app integration, hydration tracking, and cloud AI analytics.',
+  //   githubUrl: 'https://github.com/akshay-abraham/NEPHRA',
+  //   license: 'MIT License',
+  //   isFeatured: true,
+  // },
+  // {
+  //   title: 'Quantalink',
+  //   description:
+  //     'A minimal, responsive Linktree-style web app built with Next.js and TypeScript, featuring customizable links, a QED-inspired animated background, and a clean UI — deployed on Vercel.',
+  //   githubUrl: 'https://github.com/akshay-abraham/Quantalink',
+  //   license: 'GPL v3',
+  //   isFeatured: true,
+  // },
+  // {
+  //   title: 'MSEdge Redirect Logo Redesign',
+  //   description: 'Contributed a redesigned logo for the open-source MSEdge Redirect tool, improving visual branding and user recognition.',
+  //   githubUrl: 'https://github.com/rcmaehl/MSEdgeRedirect/issues/517',
+  //   license: 'LGPL-3.0',
+  //   isContribution: true
+  // },
   // To add another project, copy the object structure below:
   // {
   //   title: 'Your New Project Title',

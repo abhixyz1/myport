@@ -20,9 +20,8 @@ export const metadata: Metadata = {
   title: 'Akshay K Rooben Abraham | Portfolio',
   description: 'The personal portfolio of Akshay K Rooben Abraham, a student and open-source enthusiast exploring the intersection of science and technology.',
   keywords: [
-    'Akshay Abraham',
-    'Akshay K Rooben Abraham',
-    'Akshay K Ruben Abraham',
+    'Muhammad Abhinaya',
+    'Muhammad Abhinaya Zurfa',
     'Portfolio',
     'Next.js',
     'React',
@@ -32,16 +31,16 @@ export const metadata: Metadata = {
     'Physics'
   ],
   openGraph: {
-    title: 'Akshay K Rooben Abraham | Portfolio',
+    title: 'Muhammad Abhinaya | Portfolio',
     description: 'Student · Physics Enthusiast · Open-Source Contributor',
     url: 'https://akshayabraham.vercel.app',
-    siteName: 'Akshay Abraham Portfolio',
+    siteName: 'Muhammad Abhinaya Portfolio',
     images: [
       {
         url: 'https://akshayabraham.vercel.app/og-image.png', // Must be an absolute URL
         width: 1200,
         height: 630,
-        alt: 'Akshay Abraham Personal Portfolio',
+        alt: 'Muhammad Abhinaya Personal Portfolio',
       },
     ],
     locale: 'en_US',
@@ -75,7 +74,7 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: 'Akshay K Rooben Abraham',
-  alternateName: ['Akshay Abraham', 'Akshay K Ruben Abraham'],
+  alternateName: ['M Abhinaya', 'Muhammad Abhinaya'],
   url: 'https://akshayabraham.vercel.app',
   jobTitle: 'Student & Open-Source Contributor',
   alumniOf: {
@@ -83,9 +82,9 @@ const jsonLd = {
     name: 'Girideepam Bethany Central School',
   },
   sameAs: [
-    'https://www.linkedin.com/in/akshayabraham37/',
-    'https://github.com/akshay-abraham/',
-    'https://www.instagram.com/akshay.abraham/',
+    'https://www.linkedin.com/in/m-abhinaya-zurfa-683b9a248/',
+    'https://github.com/abhixyz1',
+    'https://www.instagram.com/m_abhinayaa',
   ],
 };
 

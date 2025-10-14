@@ -40,7 +40,7 @@ export default function ProfileSection() {
             Next.js automatically serves files from the `/public` directory at the root level.
             To change the image, replace the `profile.webp` file in the `/public` folder.
           */}
-          <AvatarImage src="/profile.webp" alt="Akshay Abraham Profile Picture" />
+          <AvatarImage src="/profile.webp" alt="Muhammad Abhinaya Profile Picture" />
           <AvatarFallback>AA</AvatarFallback>
         </Avatar>
       </div>

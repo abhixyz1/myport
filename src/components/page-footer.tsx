@@ -25,7 +25,7 @@ export default function PageFooter() {
   return (
     <footer className="w-full text-center p-4 mt-8 animate-fade-in" style={{ animationDelay: '1000ms' }}>
       <p className="text-xs text-foreground/50">
-        Akshay Abraham &copy; {year || ''}
+        Muhammad Abhinaya &copy; {year || ''}
       </p>
     </footer>
   );
