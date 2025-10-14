@@ -1,50 +1,42 @@
-/**
- * @file src/components/link-cards.tsx
- * @description A component that renders a list of social and contact link cards.
- * @note This is a client component because it uses the `useInView` hook to trigger animations.
- */
-"use client"
+"use client";
 
-import LinkCard from './link-card';
-import { useInView } from '@/hooks/use-in-view';
-import { useRef } from 'react';
-import { WhatsappIcon } from '@/components/icons/whatsapp';
-import { InstagramIcon } from '@/components/icons/instagram';
-import { GithubIcon } from '@/components/icons/github';
-import { MailIcon } from '@/components/icons/mail';
-import { LinkedinIcon } from './icons/linkedin';
+import React from 'react';
+import { motion } from 'framer-motion';
 
-// An array of link objects, defining the properties for each card.
-const links = [
-  { href: 'https://www.linkedin.com/in/akshayabraham37/', title: 'LinkedIn', Icon: LinkedinIcon },
-  { href: 'https://www.instagram.com/akshay.abraham/', title: 'Instagram', Icon: InstagramIcon },
-  { href: 'https://github.com/akshay-abraham/', title: 'GitHub', Icon: GithubIcon },
-  { href: 'https://wa.me/919946141445', title: 'WhatsApp', Icon: WhatsappIcon },
-  { href: 'mailto:akshaykroobenabraham@gmail.com', title: 'Mail', Icon: MailIcon },
-];
-
-/**
- * LinkCards component lays out a series of `LinkCard` components.
- * It uses the `useInView` hook to trigger a staggered animation for the cards
- * when they scroll into the viewport.
- * @returns {JSX.Element} A div containing a list of LinkCard components.
- */
-export default function LinkCards() {
-  const ref = useRef<HTMLDivElement>(null);
-  const isVisible = useInView(ref);
-
-  return (
-    <div ref={ref} className="space-y-4">
-      {/* Map over the links array to render a LinkCard for each item. */}
-      {links.map((link, index) => (
-        <LinkCard 
-          key={link.href} 
-          {...link} 
-          // Stagger the animation delay for each card.
-          delay={300 + index * 100}
-          isVisible={isVisible}
-        />
-      ))}
-    </div>
-  );
+interface LinkCardProps {
+  href: string;
+  title: string;
+  Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  delay: number;
+  isVisible: boolean;
 }
+
+const LinkCard: React.FC<LinkCardProps> = ({ href, title, Icon, delay, isVisible }) => {
+  return (
+    <motion.a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block p-6 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group"
+      initial={{ opacity: 0, y: 20 }}
+      animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.5, delay: delay / 1000 }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+    >
+      <div className="flex items-center space-x-4">
+        <div className="flex-shrink-0 p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg group-hover:from-purple-500 group-hover:to-blue-600 transition-all duration-300">
+          <Icon className="w-6 h-6 text-white" />
+        </div>
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-300">
+            {title}
+          </h3>
+          <p className="text-sm text-gray-500">Click to connect</p>
+        </div>
+      </div>
+    </motion.a>
+  );
+};
+
+export default LinkCard;
