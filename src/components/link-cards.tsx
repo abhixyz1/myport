@@ -3,11 +3,11 @@
  * @description A component that renders a list of social and contact link cards.
  * @note This is a client component because it uses the `useInView` hook to trigger animations.
  */
-"use client";
+"use client"
 
-import React, { useRef } from 'react';
 import LinkCard from './link-card';
 import { useInView } from '@/hooks/use-in-view';
+import { useRef } from 'react';
 import { WhatsappIcon } from '@/components/icons/whatsapp';
 import { InstagramIcon } from '@/components/icons/instagram';
 import { GithubIcon } from '@/components/icons/github';
@@ -29,7 +29,7 @@ const links = [
  * when they scroll into the viewport.
  * @returns {JSX.Element} A div containing a list of LinkCard components.
  */
-const LinkCards: React.FC = () => {
+export default function LinkCards() {
   const ref = useRef<HTMLDivElement>(null);
   const isVisible = useInView(ref);
 
@@ -39,15 +39,12 @@ const LinkCards: React.FC = () => {
       {links.map((link, index) => (
         <LinkCard 
           key={link.href} 
-          href={link.href}
-          title={link.title}
-          Icon={link.Icon}
+          {...link} 
+          // Stagger the animation delay for each card.
           delay={300 + index * 100}
           isVisible={isVisible}
         />
       ))}
     </div>
   );
-};
-
-export default LinkCards;
+}
