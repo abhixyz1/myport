@@ -2,7 +2,7 @@
 
 [⬅ Back to Main README](./README.md)
 
-> **Version:** v3.0 | **Framework:** Next.js | **Language:** TypeScript | **Author:** Akshay K Rooben Abraham
+> **Version:** v3.0 | **Framework:** Next.js | **Language:** TypeScript | **Author:** Muhammad Abhinaya Zurfa
 
 ---
 

@@ -17,8 +17,8 @@ import GuidedTour from '@/components/guided-tour';
 // Define metadata for the website, used for SEO and browser tab information.
 export const metadata: Metadata = {
   metadataBase: new URL('https://akshayabraham.vercel.app'),
-  title: 'Akshay K Rooben Abraham | Portfolio',
-  description: 'The personal portfolio of Akshay K Rooben Abraham, a student and open-source enthusiast exploring the intersection of science and technology.',
+  title: 'Muhammad Abhinaya | Portfolio',
+  description: 'The personal portfolio of Muhammad Abhinaya, a student and open-source enthusiast exploring the intersection of science and technology.',
   keywords: [
     'Muhammad Abhinaya',
     'Muhammad Abhinaya Zurfa',
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Akshay K Rooben Abraham | Portfolio',
+    title: 'Muhammad Abhinaya | Portfolio',
     description: 'Student · Physics Enthusiast · Open-Source Contributor',
     images: ['https://akshayabraham.vercel.app/og-image.png'],
   },
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  name: 'Akshay K Rooben Abraham',
+  name: 'Muhammad Abhinaya Zurfa',
   alternateName: ['M Abhinaya', 'Muhammad Abhinaya'],
   url: 'https://akshayabraham.vercel.app',
   jobTitle: 'Student & Open-Source Contributor',

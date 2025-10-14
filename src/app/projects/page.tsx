@@ -11,8 +11,8 @@ import type { Metadata } from 'next';
 
 // Page-specific metadata for SEO.
 export const metadata: Metadata = {
-  title: 'All Projects & Contributions | Akshay K Rooben Abraham',
-  description: 'A complete list of Akshay K Rooben Abraham\'s open-source projects and contributions, including NEPHRA and Quantalink.',
+  title: 'All Projects & Contributions | Muhammad Abhinaya',
+  description: 'A complete list of Muhammad Abhinaya\'s open-source projects and contributions, including NEPHRA and Quantalink.',
   // Provides the canonical URL for this page.
   alternates: {
     canonical: '/projects',
