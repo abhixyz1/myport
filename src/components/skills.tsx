@@ -25,7 +25,7 @@ import { InfiniteScroller } from './infinite-scroller';
  */
 export default function Skills() {
   const ref = useRef<HTMLDivElement>(null);
-  const isVisible = useInView(ref, { once: true });
+  const isVisible = useInView(ref);
 
   // Flatten all skills from all categories into a single array.
   const allSkills = skillsData.flatMap(category => category.skills);
