@@ -17,7 +17,7 @@ import { cn } from '@/lib/utils';
 interface LinkCardProps {
   href: string;
   title: string;
-  Icon: LucideIcon; // The icon component to display.
+  Icon: LucideIcon | React.ComponentType<React.SVGProps<SVGSVGElement>>; // Accept both types
   delay: number; // Animation delay for the fade-in effect.
   isVisible: boolean; // Flag from the parent to trigger the animation.
 }
