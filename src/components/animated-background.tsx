@@ -35,32 +35,22 @@ const AnimatedBackground = () => {
     const activeParticles: Particle[] = [];
 
     class Particle {
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      radius: number;
-      charge: 1 | -1;
-      color: string;
-      auraRadius: number;
-      auraPulse: number;
-      auraMax: number;
+      x: number = 0;
+      y: number = 0;
+      vx: number = 0;
+      vy: number = 0;
+      radius: number = 0;
+      charge: 1 | -1 = 1;
+      color: string = '';
+      auraRadius: number = 0;
+      auraPulse: number = 0;
+      auraMax: number = 0;
       inUse: boolean = false;
-      isVirtual: boolean;
+      isVirtual: boolean = false;
       life: number = 1;
 
       constructor(isVirtual = false) {
         this.isVirtual = isVirtual;
-        this.x = 0;
-        this.y = 0;
-        this.vx = 0;
-        this.vy = 0;
-        this.radius = 0;
-        this.charge = 1;
-        this.color = '';
-        this.auraRadius = 0;
-        this.auraPulse = 0;
-        this.auraMax = 0;
         this.reset();
       }
 
@@ -87,8 +77,8 @@ const AnimatedBackground = () => {
             const dx = other.x - this.x;
             const dy = other.y - this.y;
             const distSq = dx * dx + dy * dy;
-            if (distSq > 0 && distSq < 200 * 200) { // Added distSq > 0 check
-              const force = (this.charge * other.charge) / Math.max(distSq, 1); // Prevent division by zero
+            if (distSq > 0 && distSq < 200 * 200) {
+              const force = (this.charge * other.charge) / Math.max(distSq, 1);
               const angle = Math.atan2(dy, dx);
               this.vx -= Math.cos(angle) * force * 2.5;
               this.vy -= Math.sin(angle) * force * 2.5;
