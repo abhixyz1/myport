@@ -31,7 +31,7 @@ const aboutSections = [
   {
     icon: <Telescope className="h-8 w-8" />,
     title: "Curiosity & Hobbies",
-    content: "Outside of my core subjects, I have a strong interest in electronics and how software and hardware can work together. For the past few years, I've enjoyed tinkering with Arduino and ESP boards, and I'm always trying to learn more about C, Python, and using tools like Git.",
+    content: "I am interested in website development and backend engineering. I enjoy tinkering with programs using JavaScript, and I am still learning and want to dive into the Go language.",
   },
   {
     icon: <Users className="h-8 w-8" />,
