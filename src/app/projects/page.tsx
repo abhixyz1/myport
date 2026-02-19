@@ -39,9 +39,9 @@ export default function ProjectsPage() {
 
           {/* An informational box providing context about the project timeline. */}
           <div className="bg-card/30 border border-border/40 rounded-lg p-4 text-center text-sm text-foreground/70 mb-8 italic">
-            I started doing public projects only from August 2025. All previous work isn’t recorded here. Projects shown here are on GitHub, with licenses ranging between MIT and GNU GPL v3.
+            I started doing public projects from August 2024. All previous work isn’t recorded here. Projects shown here are on GitHub.
           </div>
-          
+
           {/* The Projects component is rendered here without the `featuredOnly` prop,
               so it displays all projects from the data source. */}
           <Projects />

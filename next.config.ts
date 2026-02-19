@@ -1,6 +1,8 @@
+const isProd = process.env.NODE_ENV === 'production';
+
 export default {
   output: 'export',
   images: { unoptimized: true },
-  basePath: '/myport',
-  assetPrefix: '/myport/',
+  basePath: isProd ? '/myport' : '',
+  assetPrefix: isProd ? '/myport/' : '',
 }
