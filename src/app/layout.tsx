@@ -1,46 +1,47 @@
 /**
  * @file src/app/layout.tsx
- * @description The root layout for the entire application.
- *              This component wraps all pages, providing a consistent HTML structure,
- *              loading global stylesheets and fonts, and setting up metadata for SEO.
+ * @description Root layout for Muhammad Abhinaya Zurfa's portfolio.
  */
 import type { Metadata } from 'next';
 import './globals.css';
-import { Toaster } from "@/components/ui/toaster"
-import AnimatedBackground from "@/components/animated-background"
+import { Toaster } from '@/components/ui/toaster';
+import AnimatedBackground from '@/components/animated-background';
 import MainNav from '@/components/main-nav';
-import GlobalPetRenderer from '@/components/global-pet-renderer';
 import { Analytics } from '@vercel/analytics/react';
 import { PostHogProvider } from './providers';
+import { ThemeProvider } from '@/components/theme-provider';
 import GuidedTour from '@/components/guided-tour';
 
-// Define metadata for the website, used for SEO and browser tab information.
 export const metadata: Metadata = {
-  metadataBase: new URL('https://akshayabraham.vercel.app'),
-  title: 'Muhammad Abhinaya | Portfolio',
-  description: 'The personal portfolio of Muhammad Abhinaya, a student and open-source enthusiast exploring the intersection of science and technology.',
+  metadataBase: new URL('https://abhixyz1.github.io/myport'),
+  title: 'Muhammad Abhinaya Zurfa | Web & Backend Developer',
+  description:
+    'Personal developer portfolio of Muhammad Abhinaya Zurfa — Information Systems student at Politeknik Negeri Malang (Polinema), building modern web applications and backend systems with JavaScript, TypeScript, and Go.',
   keywords: [
     'Muhammad Abhinaya',
     'Muhammad Abhinaya Zurfa',
-    'Portfolio',
+    'abhixyz1',
+    'Politeknik Negeri Malang',
+    'Polinema',
+    'Information Systems',
+    'Web Developer',
+    'Backend Developer',
     'Next.js',
-    'React',
     'TypeScript',
-    'PCMB Student',
-    'Open Source',
-    'Physics'
+    'Golang',
   ],
   openGraph: {
-    title: 'Muhammad Abhinaya | Portfolio',
-    description: 'Student · Physics Enthusiast · Open-Source Contributor',
-    url: 'https://akshayabraham.vercel.app',
+    title: 'Muhammad Abhinaya Zurfa | Web & Backend Developer',
+    description:
+      'Information Systems @ Polinema · Web & Backend Engineering · JavaScript, TypeScript & Go',
+    url: 'https://abhixyz1.github.io/myport',
     siteName: 'Muhammad Abhinaya Portfolio',
     images: [
       {
-        url: 'https://akshayabraham.vercel.app/og-image.png', // Must be an absolute URL
-        width: 1200,
-        height: 630,
-        alt: 'Muhammad Abhinaya Personal Portfolio',
+        url: 'https://abhixyz1.github.io/myport/profile.webp',
+        width: 800,
+        height: 800,
+        alt: 'Muhammad Abhinaya Zurfa Portfolio',
       },
     ],
     locale: 'en_US',
@@ -48,9 +49,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Muhammad Abhinaya | Portfolio',
-    description: 'Student · Physics Enthusiast · Open-Source Contributor',
-    images: ['https://akshayabraham.vercel.app/og-image.png'],
+    title: 'Muhammad Abhinaya Zurfa | Web & Backend Developer',
+    description:
+      'Information Systems @ Polinema · Web & Backend Engineering · JavaScript, TypeScript & Go',
+    images: ['https://abhixyz1.github.io/myport/profile.webp'],
   },
   robots: {
     index: true,
@@ -63,23 +65,21 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  // Sets the canonical URL for the root of the site.
   alternates: {
-    canonical: 'https://akshayabraham.vercel.app',
+    canonical: 'https://abhixyz1.github.io/myport',
   },
 };
 
-// JSON-LD structured data for rich search results (Google).
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: 'Muhammad Abhinaya Zurfa',
-  alternateName: ['M Abhinaya', 'Muhammad Abhinaya'],
-  url: 'https://akshayabraham.vercel.app',
-  jobTitle: 'Student & Open-Source Contributor',
+  alternateName: ['M Abhinaya', 'Muhammad Abhinaya', 'abhixyz1'],
+  url: 'https://abhixyz1.github.io/myport',
+  jobTitle: 'Web & Backend Developer · Information Systems Student',
   alumniOf: {
-    '@type': 'Organization',
-    name: 'Girideepam Bethany Central School',
+    '@type': 'CollegeOrUniversity',
+    name: 'Politeknik Negeri Malang (Polinema)',
   },
   sameAs: [
     'https://www.linkedin.com/in/m-abhinaya-zurfa-683b9a248/',
@@ -88,29 +88,24 @@ const jsonLd = {
   ],
 };
 
-/**
- * RootLayout component that serves as the main template for all pages.
- * @param {Readonly<{ children: React.ReactNode }>} props - The props object.
- * @param {React.ReactNode} props.children - The child components to be rendered within this layout (i.e., the page content).
- * @returns {JSX.Element} The root HTML structure of the application.
- */
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    // The `suppressHydrationWarning` is used because the animated background can cause
-    // minor mismatches on initial load, which is acceptable for this decorative element.
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
-        {/* Preconnect to Google Fonts for performance optimization. */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Import the "Space Grotesk" font stylesheet. */}
-        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
-        <meta name="google-site-verification" content="-ggF-eMSfmD9YH-4yLzcQDEjUmv9WBmZuwxjsFAHifA" />
-         {/* Add JSON-LD to the head to provide structured data to search engines. */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+        <meta
+          name="google-site-verification"
+          content="-ggF-eMSfmD9YH-4yLzcQDEjUmv9WBmZuwxjsFAHifA"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -118,19 +113,14 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <PostHogProvider>
-          {/* The AnimatedBackground component is rendered here to appear on all pages. */}
-          <AnimatedBackground />
-          {/* This component renders the roaming pet if one is active in the global state. */}
-          <GlobalPetRenderer />
-          {/* This div is the portal target for the roaming pet. */}
-          <div id="pet-container"></div>
-          <MainNav />
-          {/* Renders the active page content. */}
-          <main>{children}</main>
-          {/* The Toaster component handles pop-up notifications. */}
-          <Toaster />
-          <Analytics />
-          <GuidedTour />
+          <ThemeProvider>
+            <AnimatedBackground />
+            <MainNav />
+            <main>{children}</main>
+            <Toaster />
+            <Analytics />
+            <GuidedTour />
+          </ThemeProvider>
         </PostHogProvider>
       </body>
     </html>

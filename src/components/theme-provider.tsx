@@ -1,49 +1,82 @@
 /**
  * @file src/components/theme-provider.tsx
- * @description A simplified context provider. In this version, it's a placeholder
- *              and doesn't manage themes, but it could be expanded in the future
- *              to handle theme switching (dark/light) or motion preferences.
- * @note This is a client component because it uses `createContext`.
+ * @description Provides global Dark/Light theme switching and Command Palette state.
  */
-"use client"
+"use client";
 
-import React, { createContext, useContext, useMemo } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
 
-/**
- * Defines the shape of the context data.
- * Currently, it only includes a boolean for motion preferences.
- */
+type ThemeMode = 'dark' | 'light';
+
 interface ThemeContextType {
+  theme: ThemeMode;
+  toggleTheme: () => void;
+  setTheme: (theme: ThemeMode) => void;
   motionEnabled: boolean;
+  isCommandOpen: boolean;
+  setIsCommandOpen: (open: boolean) => void;
 }
 
-// Create the context with an initial value of undefined.
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-/**
- * ThemeProvider is a wrapper component that provides the theme context to its children.
- * @param {{ children: React.ReactNode }} props - The props object.
- * @returns {JSX.Element} The provider component.
- */
+const STORAGE_KEY = 'abhiport-theme';
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // `useMemo` is used to prevent the context value from being recalculated on every render.
-  const value = useMemo(() => ({
-    // Currently hardcoded to true, but could be controlled by state in the future.
-    motionEnabled: true, 
-  }), []);
-  
-  return (
-    <ThemeContext.Provider value={value}>
-      {children}
-    </ThemeContext.Provider>
+  const [theme, setThemeState] = useState<ThemeMode>('dark');
+  const [isCommandOpen, setIsCommandOpen] = useState(false);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY) as ThemeMode | null;
+      const initial: ThemeMode = saved === 'light' || saved === 'dark' ? saved : 'dark';
+      setThemeState(initial);
+      document.documentElement.classList.toggle('dark', initial === 'dark');
+    } catch {
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
+
+  const setTheme = useCallback((nextTheme: ThemeMode) => {
+    setThemeState(nextTheme);
+    document.documentElement.classList.toggle('dark', nextTheme === 'dark');
+    try {
+      localStorage.setItem(STORAGE_KEY, nextTheme);
+    } catch {
+      // ignore storage errors
+    }
+  }, []);
+
+  const toggleTheme = useCallback(() => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  }, [theme, setTheme]);
+
+  // Global keyboard shortcut Cmd+K / Ctrl+K for the Command Palette
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsCommandOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const value = useMemo(
+    () => ({
+      theme,
+      toggleTheme,
+      setTheme,
+      motionEnabled: true,
+      isCommandOpen,
+      setIsCommandOpen,
+    }),
+    [theme, toggleTheme, setTheme, isCommandOpen]
   );
+
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
 
-/**
- * A custom hook to easily access the theme context.
- * It throws an error if used outside of a ThemeProvider, ensuring proper usage.
- * @returns {ThemeContextType} The theme context value.
- */
 export const useThemeContext = () => {
   const context = useContext(ThemeContext);
   if (context === undefined) {

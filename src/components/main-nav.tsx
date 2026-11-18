@@ -1,25 +1,21 @@
 /**
  * @file src/components/main-nav.tsx
- * @description A responsive navigation component that renders the appropriate
- *              navigation bar based on the screen size (desktop or mobile).
+ * @description Centered floating navigation header and global Command Palette mount.
  */
 import DesktopNav from './desktop-nav';
 import MobileNav from './mobile-nav';
+import CommandPalette from './command-palette';
 
-/**
- * MainNav is the primary navigation container for the application.
- * It centrally manages and displays the correct navigation component.
- * @returns {JSX.Element} A div containing the responsive navigation.
- */
 export default function MainNav() {
   return (
-    <div className="fixed top-4 right-4 z-50">
-      <div className="hidden md:block">
-         <DesktopNav />
+    <>
+      <div className="fixed top-4 inset-x-0 z-50 flex justify-center px-4 pointer-events-none">
+        <div className="pointer-events-auto w-full max-w-md md:w-auto md:max-w-none">
+          <DesktopNav />
+          <MobileNav />
+        </div>
       </div>
-      <div className="md:hidden">
-        <MobileNav />
-      </div>
-    </div>
+      <CommandPalette />
+    </>
   );
 }

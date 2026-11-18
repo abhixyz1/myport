@@ -1,6 +1,5 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'https://akshayabraham.vercel.app',
-  generateRobotsTxt: true, // (Optional)
-  // ...other options
+  siteUrl: 'https://abhixyz1.github.io/myport',
+  generateRobotsTxt: true,
 }

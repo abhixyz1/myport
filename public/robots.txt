@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://akshayabraham.vercel.app
+Host: https://abhixyz1.github.io/myport
 
 # Sitemaps
-Sitemap: https://akshayabraham.vercel.app/sitemap.xml
+Sitemap: https://abhixyz1.github.io/myport/sitemap.xml

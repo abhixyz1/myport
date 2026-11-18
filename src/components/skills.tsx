@@ -1,112 +1,103 @@
 /**
  * @file src/components/skills.tsx
- * @description A component that displays a dynamic, two-row infinite scroller
- *              of technical skill logos on the homepage. This provides a quick,
- *              visually engaging overview of the user's capabilities.
- * @note This is a client component because it uses the `useInView` hook for animations.
+ * @description Two-row glassmorphic infinite marquee of technical skills on the homepage.
  */
-"use client"
+"use client";
 
-import { useInView } from '@/hooks/use-in-view';
-import { useRef } from 'react';
+import React from 'react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { Button } from './ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Cpu } from 'lucide-react';
 import { skillsData } from '@/lib/skills-data';
-import { Card, CardHeader } from './ui/card';
 import { InfiniteScroller } from './infinite-scroller';
 
-/**
- * A visually engaging component that showcases a wide range of technical skills
- * using a two-row, infinitely scrolling logo animation. It also includes a
- * call-to-action to view the full skillset.
- * @returns {JSX.Element} A section containing the animated skills showcase.
- */
 export default function Skills() {
-  const ref = useRef<HTMLDivElement>(null);
-  const isVisible = useInView(ref);
-
-  // Flatten all skills from all categories into a single array.
-  const allSkills = skillsData.flatMap(category => category.skills);
-  // Split the skills into two halves for the two scrolling rows.
+  const allSkills = skillsData.flatMap((category) => category.skills);
   const midPoint = Math.ceil(allSkills.length / 2);
   const firstRowSkills = allSkills.slice(0, midPoint);
   const secondRowSkills = allSkills.slice(midPoint);
 
   return (
-    <section 
-      ref={ref}
-      className={cn(
-        "space-y-6 text-center transition-opacity duration-1000 ease-out",
-        isVisible ? "opacity-100" : "opacity-0"
-      )}
-      id="skills-section"
-      style={{
-        transitionDelay: isVisible ? '150ms' : '0ms'
-      }}
-    >
-      <h2 className={cn(
-          "text-2xl font-bold text-primary tracking-tight transition-all duration-700",
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-        )}>
-          Skills & Technologies
-      </h2>
+    <section id="skills-section" className="space-y-6 w-full">
+      {/* Header Row */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="space-y-1.5 text-left">
+          <div className="inline-flex items-center gap-2 font-mono text-xs text-primary">
+            <Cpu className="h-3.5 w-3.5" />
+            <span>TECHNICAL ARSENAL</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+            Stack &amp; <span className="text-gradient">Technologies</span>
+          </h2>
+        </div>
 
-      {/* Container for the two-row infinite scroller. */}
-      <div className="space-y-4">
-        <InfiniteScroller speed="slow">
-          {firstRowSkills.map((skill) => (
-            <Card 
-              key={skill.name}
-              className="bg-card/40 border-border/40 shadow-md text-center flex flex-col items-center justify-center w-[120px] h-[80px] shrink-0 p-2 transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl hover:bg-card/60"
-            >
-              <CardHeader className="p-0 flex-grow flex flex-col items-center justify-center gap-2">
-                 <div className={cn("h-10 w-10 flex items-center justify-center text-foreground", skill.iconClassName)}>
-                   <div className="h-8 w-8 flex items-center justify-center">
-                     {skill.icon}
-                   </div>
-                </div>
-                <p className="text-xs font-medium text-foreground/80">{skill.name}</p>
-              </CardHeader>
-            </Card>
-          ))}
-        </InfiniteScroller>
-        
-        <InfiniteScroller speed="slow" direction="right">
-          {secondRowSkills.map((skill) => (
-             <Card 
-              key={skill.name}
-              className="bg-card/40 border-border/40 shadow-md text-center flex flex-col items-center justify-center w-[120px] h-[80px] shrink-0 p-2 transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl hover:bg-card/60"
-            >
-              <CardHeader className="p-0 flex-grow flex flex-col items-center justify-center gap-2">
-                 <div className={cn("h-10 w-10 flex items-center justify-center text-foreground", skill.iconClassName)}>
-                   <div className="h-8 w-8 flex items-center justify-center">
-                     {skill.icon}
-                   </div>
-                </div>
-                <p className="text-xs font-medium text-foreground/80">{skill.name}</p>
-              </CardHeader>
-            </Card>
-          ))}
-        </InfiniteScroller>
-      </div>
-
-      {/* Button to navigate to the full skills page. */}
-      <div 
-        className={cn(
-          "text-center transition-all duration-700 pt-2",
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
-        )}
-        style={{ transitionDelay: '500ms'}}
-      >
         <Link href="/skills" id="see-all-skills-button">
-          <Button variant="outline" className="bg-card/30 border-border/40">
-            See Full Technical Skillset
-            <ArrowRight className="ml-2 h-4 w-4" />
+          <Button
+            variant="ghost"
+            size="sm"
+            className="group text-muted-foreground hover:text-primary font-mono text-xs"
+          >
+            Full Skill Matrix
+            <ArrowRight className="ml-1.5 h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
           </Button>
         </Link>
       </div>
+
+      {/* Dual-row Infinite Marquee */}
+      <div className="space-y-3 py-1">
+        <InfiniteScroller speed="normal">
+          {firstRowSkills.map((skill) => (
+            <div
+              key={skill.name}
+              className="group flex items-center gap-3.5 rounded-2xl glass-card px-4 py-3 min-w-[175px] transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_8px_30px_-12px_hsl(var(--primary)/0.35)]"
+            >
+              <div
+                className={cn(
+                  'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 text-foreground group-hover:text-primary group-hover:scale-110 transition-all',
+                  skill.iconClassName
+                )}
+              >
+                <div className="h-6 w-6 flex items-center justify-center">{skill.icon}</div>
+              </div>
+              <div className="text-left">
+                <p className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
+                  {skill.name}
+                </p>
+                {skill.level && (
+                  <p className="font-mono text-[10px] text-muted-foreground">{skill.level}</p>
+                )}
+              </div>
+            </div>
+          ))}
+        </InfiniteScroller>
+
+        <InfiniteScroller speed="normal" direction="right">
+          {secondRowSkills.map((skill) => (
+            <div
+              key={skill.name}
+              className="group flex items-center gap-3.5 rounded-2xl glass-card px-4 py-3 min-w-[175px] transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_8px_30px_-12px_hsl(var(--primary)/0.35)]"
+            >
+              <div
+                className={cn(
+                  'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 text-foreground group-hover:text-primary group-hover:scale-110 transition-all',
+                  skill.iconClassName
+                )}
+              >
+                <div className="h-6 w-6 flex items-center justify-center">{skill.icon}</div>
+              </div>
+              <div className="text-left">
+                <p className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
+                  {skill.name}
+                </p>
+                {skill.level && (
+                  <p className="font-mono text-[10px] text-muted-foreground">{skill.level}</p>
+                )}
+              </div>
+            </div>
+          ))}
+        </InfiniteScroller>
+      </div>
     </section>
-  )
+  );
 }

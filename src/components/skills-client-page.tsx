@@ -1,96 +1,140 @@
-
 /**
  * @file src/components/skills-client-page.tsx
- * @description A client component that renders the animated, interactive content
- *              for the main "Skills & Technologies" page. It handles the entrance
- *              animations for the skill categories and uses an infinite scroller
- *              for a dynamic presentation.
- * @note This is a client component because it uses hooks for animations.
+ * @description Interactive Bento grid of categorized technical skills with 3D Spotlight cards
+ *              and instant category/priority filtering.
  */
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { skillsData, SkillCategory } from '@/lib/skills-data';
-import { Card, CardHeader } from '@/components/ui/card';
+import { SpotlightCard } from '@/components/ui/spotlight-card';
 import { cn } from '@/lib/utils';
-import { InfiniteScroller } from '@/components/infinite-scroller';
+import { Sparkles } from 'lucide-react';
 
-/**
- * A small component to render a styled icon for a skill category.
- * @param {{ icon: React.ReactNode }} props - The props object.
- * @param {React.ReactNode} props.icon - The icon element to render.
- * @returns {JSX.Element} A styled div containing the icon.
- */
-const CategoryIcon = ({ icon }: { icon: React.ReactNode }) => (
-  <div className="w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-4">
-    {icon}
-  </div>
-);
-
-/**
- * SkillsClientPage component renders the full, categorized list of skills with animations.
- * @returns {JSX.Element} The rendered skills content.
- */
 export default function SkillsClientPage() {
-  // State to track if the component has mounted, to prevent server-side animation rendering.
-  const [isMounted, setIsMounted] = useState(false);
+  const [highlightCoreOnly, setHighlightCoreOnly] = useState(false);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const renderCategory = (category: SkillCategory, categoryIndex: number) => {
+    const displayedSkills = highlightCoreOnly
+      ? category.skills.filter((s) => s.isPriority)
+      : category.skills;
 
-  /**
-   * Renders a single skill category, including its title, icon, and an infinite scroller of skill cards.
-   * @param {SkillCategory} category - The category data object.
-   * @param {number} index - The index of the category, used for animation delay.
-   * @returns {JSX.Element} A div containing the rendered category.
-   */
-  const renderCategory = (category: SkillCategory, index: number) => (
-    <div 
-      key={category.title}
-      className={cn(
-        "space-y-6 transition-all duration-700 ease-out",
-        // Only apply animation classes if the component is mounted on the client.
-        isMounted ? "animate-fade-in-up" : "opacity-0"
-      )}
-      style={{ animationDelay: `${200 + index * 150}ms` }}
-    >
-      <div className="flex flex-col items-center text-center">
-        <CategoryIcon icon={category.icon} />
-        <h2 className="text-2xl font-bold text-primary mb-2">{category.title}</h2>
-        {/* Render the subtitle for the category if it exists */}
-        {category.subtitle && (
-          <p className="text-foreground/70 max-w-2xl text-sm leading-relaxed">{category.subtitle}</p>
-        )}
-      </div>
-      {/* Use the InfiniteScroller for a dynamic, moving display of skills. */}
-       <InfiniteScroller speed={index % 2 === 0 ? "slow" : "normal"}>
-        {category.skills.map((skill) => (
-          <Card
-            key={skill.name}
-            className={cn(
-              "bg-card/40 border-border/40 shadow-lg text-center flex flex-col items-center justify-center w-[160px] h-[120px] shrink-0 p-4 transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl hover:bg-card/60 relative overflow-hidden group",
-              skill.isPriority && "border-primary/40"
-            )}
-          >
-             {skill.isPriority && <div className="animate-border-glow"></div>}
-             <div className="relative z-10 flex flex-col items-center justify-center gap-2 h-full">
-                <div className={cn("h-12 w-12 flex items-center justify-center text-foreground", skill.iconClassName)}>
-                  <div className="h-10 w-10 flex items-center justify-center">
-                    {skill.icon}
-                  </div>
+    if (displayedSkills.length === 0) return null;
+
+    return (
+      <motion.section
+        key={category.title}
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-40px' }}
+        transition={{ duration: 0.5, delay: categoryIndex * 0.1 }}
+        className="space-y-6"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/60 pb-4">
+          <div className="flex items-start sm:items-center gap-3.5">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 border border-primary/25 text-primary shadow-sm">
+              {category.icon}
+            </div>
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+                {category.title}
+              </h2>
+              {category.subtitle && (
+                <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
+                  {category.subtitle}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <span className="font-mono text-xs text-muted-foreground self-start sm:self-center rounded-full glass-pill px-3 py-1">
+            {displayedSkills.length} technologies
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          {displayedSkills.map((skill, idx) => (
+            <motion.div
+              key={skill.name}
+              initial={{ opacity: 0, scale: 0.94 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: idx * 0.04 }}
+            >
+              <SpotlightCard
+                className={cn(
+                  'p-4 h-full flex items-center gap-3.5',
+                  skill.isPriority && 'border-primary/30'
+                )}
+              >
+                <div
+                  className={cn(
+                    'flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 text-foreground group-hover:text-primary group-hover:scale-110 transition-all duration-300',
+                    skill.iconClassName
+                  )}
+                >
+                  <div className="h-7 w-7 flex items-center justify-center">{skill.icon}</div>
                 </div>
-                <p className="text-sm font-medium text-foreground/90">{skill.name}</p>
-              </div>
-          </Card>
-        ))}
-      </InfiniteScroller>
-    </div>
-  );
+
+                <div className="min-w-0 text-left">
+                  <div className="flex items-center gap-1.5">
+                    <p className="font-semibold text-sm text-foreground truncate group-hover:text-primary transition-colors">
+                      {skill.name}
+                    </p>
+                    {skill.isPriority && (
+                      <span title="Core Focus" className="inline-flex">
+                        <Sparkles className="h-3 w-3 text-primary shrink-0" />
+                      </span>
+                    )}
+                  </div>
+                  {skill.level && (
+                    <p className="font-mono text-[11px] text-muted-foreground truncate">
+                      {skill.level}
+                    </p>
+                  )}
+                </div>
+              </SpotlightCard>
+            </motion.div>
+          ))}
+        </div>
+      </motion.section>
+    );
+  };
 
   return (
-    <>
-      {skillsData.map(renderCategory)}
-    </>
+    <div className="space-y-12">
+      {/* Filter Toggle Bar */}
+      <div className="flex justify-center">
+        <div className="inline-flex items-center gap-1 rounded-full glass-card p-1">
+          <button
+            onClick={() => setHighlightCoreOnly(false)}
+            className={cn(
+              'rounded-full px-4 py-1.5 text-xs font-medium transition-all',
+              !highlightCoreOnly
+                ? 'bg-primary text-primary-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground'
+            )}
+          >
+            All Technologies
+          </button>
+          <button
+            onClick={() => setHighlightCoreOnly(true)}
+            className={cn(
+              'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-medium transition-all',
+              highlightCoreOnly
+                ? 'bg-primary text-primary-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground'
+            )}
+          >
+            <Sparkles className="h-3 w-3" />
+            Core Focus Only
+          </button>
+        </div>
+      </div>
+
+      {/* Categories */}
+      <div className="space-y-14">{skillsData.map(renderCategory)}</div>
+    </div>
   );
 }

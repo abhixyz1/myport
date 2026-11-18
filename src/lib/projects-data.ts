@@ -1,59 +1,64 @@
 /**
  * @file /src/lib/projects-data.ts
- * @description This file contains the data for all projects.
- *              To add a new project, simply add a new object to the `projects` array.
- *              The data is structured to be easily mapped over in the UI components.
+ * @description Portfolio projects data for Muhammad Abhinaya Zurfa (@abhixyz1).
  */
 
-/**
- * Defines the structure for a single project object.
- */
 export interface Project {
   title: string;
   description: string;
   githubUrl: string;
+  liveUrl?: string;
   license: string;
-  /** Optional. If true, the project will be displayed on the home page. */
+  category: 'Web & Frontend' | 'Backend & Go' | 'Information Systems';
+  tags: string[];
+  status?: string;
   isFeatured?: boolean;
-  /** Optional. If true, you can use this to style or filter contributions differently. */
   isContribution?: boolean;
 }
 
-/**
- * An array of project objects.
- */
 export const projects: Project[] = [
-  // To feature a project on the home page, set `isFeatured: true`.
-  // {
-  //   title: 'NEPHRA - Smart Water Bottle System',
-  //   description:
-  //     'A smart water bottle system with ESP32, copper tape sensor, and MPU6050, featuring mobile app integration, hydration tracking, and cloud AI analytics.',
-  //   githubUrl: 'https://github.com/akshay-abraham/NEPHRA',
-  //   license: 'MIT License',
-  //   isFeatured: true,
-  // },
-  // {
-  //   title: 'Quantalink',
-  //   description:
-  //     'A minimal, responsive Linktree-style web app built with Next.js and TypeScript, featuring customizable links, a QED-inspired animated background, and a clean UI — deployed on Vercel.',
-  //   githubUrl: 'https://github.com/akshay-abraham/Quantalink',
-  //   license: 'GPL v3',
-  //   isFeatured: true,
-  // },
-  // {
-  //   title: 'MSEdge Redirect Logo Redesign',
-  //   description: 'Contributed a redesigned logo for the open-source MSEdge Redirect tool, improving visual branding and user recognition.',
-  //   githubUrl: 'https://github.com/rcmaehl/MSEdgeRedirect/issues/517',
-  //   license: 'LGPL-3.0',
-  //   isContribution: true
-  // },
-  // To add another project, copy the object structure below:
-  // {
-  //   title: 'Your New Project Title',
-  //   description: 'A brief and engaging description of your project.',
-  //   githubUrl: 'https://github.com/your-username/your-repo',
-  //   license: 'Your Project License (e.g., MIT, Apache 2.0)',
-  //   isFeatured: false, // Set to true to show on home page
-  //   isContribution: false, // Set to true if it's a contribution to another project
-  // },
+  {
+    title: 'AbhiPort — Interactive Bento Portfolio',
+    description:
+      'A high-craft personal developer portfolio engineered with Next.js 15, TypeScript, and Framer Motion. Features cursor-tracking spotlight cards, 3D spring physics, an interactive Go/TS terminal widget, and a Cmd+K command palette.',
+    githubUrl: 'https://github.com/abhixyz1/myport',
+    license: 'MIT License',
+    category: 'Web & Frontend',
+    tags: ['Next.js 15', 'TypeScript', 'Framer Motion', 'Tailwind CSS'],
+    status: 'Production',
+    isFeatured: true,
+  },
+  {
+    title: 'GoFlow — RESTful Backend & Task Engine',
+    description:
+      'A lightweight, fast backend service built while exploring Go (Golang) concurrency and clean architecture. Implements structured routing, middleware logging, JWT authentication, and SQLite persistence.',
+    githubUrl: 'https://github.com/abhixyz1',
+    license: 'MIT License',
+    category: 'Backend & Go',
+    tags: ['Go (Golang)', 'REST API', 'SQLite', 'Clean Architecture'],
+    status: 'Active Lab',
+    isFeatured: true,
+  },
+  {
+    title: 'SiakadHub — Academic & Campus Workflow Tracker',
+    description:
+      'An Information Systems web application concept tailored for university students at Polinema to organize coursework deadlines, lab schedules, GPA projections, and team assignments in one unified dashboard.',
+    githubUrl: 'https://github.com/abhixyz1',
+    license: 'Open Source',
+    category: 'Information Systems',
+    tags: ['React', 'TypeScript', 'Node.js', 'Tailwind CSS'],
+    status: 'Prototype',
+    isFeatured: true,
+  },
+  {
+    title: 'JS-Backend & Automation Toolkit',
+    description:
+      'A curated collection of JavaScript & TypeScript utilities, API scrapers, CLI scripts, and algorithmic problem-solving exercises focused on backend engineering fundamentals.',
+    githubUrl: 'https://github.com/abhixyz1',
+    license: 'MIT License',
+    category: 'Backend & Go',
+    tags: ['JavaScript', 'Node.js', 'CLI', 'Algorithms'],
+    status: 'Collection',
+    isFeatured: false,
+  },
 ];

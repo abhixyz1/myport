@@ -1,245 +1,189 @@
+/**
+ * @file src/components/animated-background.tsx
+ * @description A modern, theme-aware interactive constellation & aurora spotlight background.
+ */
 "use client";
 
 import React, { useRef, useEffect } from 'react';
 
-/**
- * AnimatedBackground component creates a dynamic, physics-based visual effect.
- * It adapts particle density and spawn rates based on the device to prioritize
- * either performance (desktop) or smoothness (mobile).
- * @returns {JSX.Element} A canvas element that fills the viewport.
- */
 const AnimatedBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationFrameId = useRef<number>();
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    
-    // Animation constants for framerate capping.
-    let lastFrameTime = 0;
-    const targetFPS = 27;
-    const frameInterval = 1000 / targetFPS;
 
-    // Simulation state variables.
-    let width = canvas.width = window.innerWidth;
-    let height = canvas.height = window.innerHeight;
-    
-    const isMobile = width <= 768;
-    let maxParticles = isMobile ? 20 : 30; 
-    let virtualPairSpawnRate = isMobile ? 0.15 : 0.25;
+    let animationFrameId: number;
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
 
-    const particlePool: Particle[] = [];
-    const activeParticles: Particle[] = [];
+    const mouse = { x: -1000, y: -1000, radius: 180 };
 
-    class Particle {
-      x: number = 0;
-      y: number = 0;
-      vx: number = 0;
-      vy: number = 0;
-      radius: number = 0;
-      charge: 1 | -1 = 1;
-      color: string = '';
-      auraRadius: number = 0;
-      auraPulse: number = 0;
-      auraMax: number = 0;
-      inUse: boolean = false;
-      isVirtual: boolean = false;
-      life: number = 1;
-
-      constructor(isVirtual = false) {
-        this.isVirtual = isVirtual;
-        this.reset();
-      }
-
-      reset(x?: number, y?: number, charge?: 1 | -1) {
-        this.x = x ?? Math.random() * width;
-        this.y = y ?? Math.random() * height;
-        this.vx = Math.random() * 0.4 - 0.2;
-        this.vy = Math.random() * 0.4 - 0.2;
-        this.charge = charge ?? (Math.random() > 0.5 ? 1 : -1);
-        this.radius = this.isVirtual ? 1.2 : Math.random() * 1.5 + 1;
-        this.color = this.charge > 0 ? 'hsl(210, 100%, 75%)' : 'hsl(340, 100%, 75%)';
-        this.auraMax = this.isVirtual ? 0 : this.radius + 8;
-        this.auraPulse = Math.random() * Math.PI * 2;
-        this.auraRadius = this.auraMax / 2;
-        this.life = this.isVirtual ? Math.random() * 0.6 + 0.3 : 1;
-        this.inUse = true;
-        return this;
-      }
-      
-      update(particles: Particle[]) {
-        if (!this.isVirtual) {
-          particles.forEach(other => {
-            if (this === other || !other.inUse || other.isVirtual) return;
-            const dx = other.x - this.x;
-            const dy = other.y - this.y;
-            const distSq = dx * dx + dy * dy;
-            if (distSq > 0 && distSq < 200 * 200) {
-              const force = (this.charge * other.charge) / Math.max(distSq, 1);
-              const angle = Math.atan2(dy, dx);
-              this.vx -= Math.cos(angle) * force * 2.5;
-              this.vy -= Math.sin(angle) * force * 2.5;
-            }
-          });
-        }
-        
-        this.x += this.vx;
-        this.y += this.vy;
-
-        // Clamp position to canvas bounds
-        this.x = Math.max(this.radius, Math.min(width - this.radius, this.x));
-        this.y = Math.max(this.radius, Math.min(height - this.radius, this.y));
-
-        // Bounce off edges
-        if (this.x <= this.radius || this.x >= width - this.radius) this.vx *= -1;
-        if (this.y <= this.radius || this.y >= height - this.radius) this.vy *= -1;
-        
-        this.auraPulse += 0.03;
-        this.auraRadius = this.auraMax * (0.6 + Math.sin(this.auraPulse) * 0.4);
-
-        if (this.isVirtual) {
-          this.life -= 0.01;
-          if (this.life <= 0) this.inUse = false;
-        }
-      }
-
-      draw() {
-        if (!ctx) return;
-        
-        try {
-          const auraAlpha = this.isVirtual ? this.life * 0.25 : 0.15;
-          ctx.beginPath();
-          const gradient = ctx.createRadialGradient(this.x, this.y, this.radius, this.x, this.y, this.auraRadius);
-          gradient.addColorStop(0, `hsla(${this.charge > 0 ? 210 : 340}, 100%, 75%, ${auraAlpha})`);
-          gradient.addColorStop(1, `hsla(0, 0%, 100%, 0)`);
-          ctx.fillStyle = gradient;
-          ctx.arc(this.x, this.y, this.auraRadius, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-          const coreAlpha = this.isVirtual ? this.life * 0.9 : 1;
-          ctx.fillStyle = `hsla(${this.charge > 0 ? 210 : 340}, 100%, 80%, ${coreAlpha})`;
-          ctx.shadowColor = this.color;
-          ctx.shadowBlur = 5;
-          ctx.fill();
-          ctx.shadowBlur = 0;
-        } catch (error) {
-          console.warn('Error drawing particle:', error);
-        }
-      }
-    }
-
-    const getParticle = (isVirtual = false) => {
-        const available = particlePool.filter(p => !p.inUse && p.isVirtual === isVirtual);
-        return available.length > 0 ? available[0].reset() : new Particle(isVirtual);
-    }
-    
-    const init = () => {
-      activeParticles.length = 0;
-      particlePool.length = 0;
-      for (let i = 0; i < maxParticles * 3; i++) {
-         particlePool.push(new Particle(i >= maxParticles));
-      }
-      for (let i = 0; i < maxParticles; i++) {
-        activeParticles.push(getParticle(false));
-      }
-    }
-
-    const spawnVirtualPair = () => {
-        if (activeParticles.filter(p => p.isVirtual).length > 40) return;
-        const x = Math.random() * width;
-        const y = Math.random() * height;
-        const p1 = getParticle(true).reset(x, y, 1);
-        const p2 = getParticle(true).reset(x + Math.random()*10-5, y + Math.random()*10-5, -1);
-        activeParticles.push(p1, p2);
-    }
-
-    const animate = (timestamp: number) => {
-      animationFrameId.current = requestAnimationFrame(animate);
-
-      const elapsed = timestamp - lastFrameTime;
-      if (elapsed < frameInterval) return;
-      lastFrameTime = timestamp - (elapsed % frameInterval);
-
-      try {
-        ctx.fillStyle = 'hsl(180, 50%, 98%)';
-        ctx.fillRect(0, 0, width, height);
-        
-        if (Math.random() < virtualPairSpawnRate) {
-            spawnVirtualPair();
-        }
-
-        // Draw "Photon Exchange" Lines
-        for (let i = 0; i < activeParticles.length; i++) {
-          for (let j = i + 1; j < activeParticles.length; j++) {
-            const p1 = activeParticles[i];
-            const p2 = activeParticles[j];
-            if (!p1.inUse || !p2.inUse || p1.isVirtual || p2.isVirtual) continue;
-
-            const dx = p1.x - p2.x;
-            const dy = p1.y - p2.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-
-            if (dist < 150 && dist > 0) {
-              ctx.beginPath();
-              ctx.moveTo(p1.x, p1.y);
-              const midX = (p1.x + p2.x) / 2 + (Math.random() - 0.5) * 30;
-              const midY = (p1.y + p2.y) / 2 + (Math.random() - 0.5) * 30;
-              ctx.quadraticCurveTo(midX, midY, p2.x, p2.y);
-              ctx.strokeStyle = `hsla(50, 100%, 70%, ${0.9 - dist / 150})`;
-              ctx.lineWidth = 2;
-              ctx.shadowColor = 'hsl(50, 100%, 80%)';
-              ctx.shadowBlur = 10;
-              ctx.stroke();
-              ctx.shadowBlur = 0;
-            }
-          }
-        }
-
-        // Update and Draw all active particles
-        for (let i = activeParticles.length - 1; i >= 0; i--) {
-          const p = activeParticles[i];
-          if (p.inUse) {
-              p.update(activeParticles);
-              p.draw();
-          } else {
-              activeParticles.splice(i, 1);
-          }
-        }
-      } catch (error) {
-        console.error('Animation error:', error);
-      }
+    const handleMouseMove = (e: MouseEvent) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
     };
+
+    const handleMouseLeave = () => {
+      mouse.x = -1000;
+      mouse.y = -1000;
+    };
+
+    interface Node {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+      hue: number;
+      pulse: number;
+    }
+
+    const createNodes = (): Node[] => {
+      const count = width <= 768 ? 28 : 52;
+      const list: Node[] = [];
+      for (let i = 0; i < count; i++) {
+        list.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.45,
+          vy: (Math.random() - 0.5) * 0.45,
+          size: Math.random() * 1.8 + 0.8,
+          hue: Math.random() > 0.45 ? 168 : 252, // Emerald-Teal or Electric Indigo
+          pulse: Math.random() * Math.PI * 2,
+        });
+      }
+      return list;
+    };
+
+    let nodes = createNodes();
 
     const handleResize = () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
-      const newIsMobile = width <= 768;
-      maxParticles = newIsMobile ? 20 : 30;
-      virtualPairSpawnRate = newIsMobile ? 0.15 : 0.25;
-      init();
-    }
-    
-    window.addEventListener('resize', handleResize);
-    
-    init();
-    animate(0);
+      nodes = createNodes();
+    };
 
-    const cleanup = () => {
-      window.removeEventListener('resize', handleResize);
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseleave', handleMouseLeave);
+
+    const render = () => {
+      animationFrameId = requestAnimationFrame(render);
+      ctx.clearRect(0, 0, width, height);
+
+      const isDark = document.documentElement.classList.contains('dark');
+
+      // Draw subtle cursor radial aura
+      if (mouse.x > 0 && mouse.y > 0) {
+        const cursorGrad = ctx.createRadialGradient(
+          mouse.x,
+          mouse.y,
+          10,
+          mouse.x,
+          mouse.y,
+          360
+        );
+        cursorGrad.addColorStop(
+          0,
+          isDark ? 'hsla(168, 88%, 48%, 0.08)' : 'hsla(170, 84%, 34%, 0.06)'
+        );
+        cursorGrad.addColorStop(
+          0.5,
+          isDark ? 'hsla(252, 88%, 68%, 0.04)' : 'hsla(252, 80%, 60%, 0.03)'
+        );
+        cursorGrad.addColorStop(1, 'hsla(0, 0%, 0%, 0)');
+        ctx.fillStyle = cursorGrad;
+        ctx.fillRect(0, 0, width, height);
+      }
+
+      // Update & draw nodes
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        n.x += n.vx;
+        n.y += n.vy;
+        n.pulse += 0.025;
+
+        if (n.x < 0 || n.x > width) n.vx *= -1;
+        if (n.y < 0 || n.y > height) n.vy *= -1;
+
+        // Gentle cursor interaction
+        const dxMouse = mouse.x - n.x;
+        const dyMouse = mouse.y - n.y;
+        const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
+        if (distMouse < mouse.radius && distMouse > 0) {
+          const force = (mouse.radius - distMouse) / mouse.radius;
+          n.x -= (dxMouse / distMouse) * force * 0.8;
+          n.y -= (dyMouse / distMouse) * force * 0.8;
+        }
+
+        const alpha = (0.35 + Math.sin(n.pulse) * 0.2) * (isDark ? 1 : 0.7);
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.size, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${n.hue}, 88%, ${isDark ? 65 : 42}%, ${alpha})`;
+        ctx.fill();
+
+        // Connect nearby nodes
+        for (let j = i + 1; j < nodes.length; j++) {
+          const m = nodes[j];
+          const dx = n.x - m.x;
+          const dy = n.y - m.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const maxDist = 140;
+
+          if (dist < maxDist) {
+            const lineAlpha = (1 - dist / maxDist) * (isDark ? 0.14 : 0.09);
+            ctx.beginPath();
+            ctx.moveTo(n.x, n.y);
+            ctx.lineTo(m.x, m.y);
+            ctx.strokeStyle = `hsla(${n.hue}, 80%, ${isDark ? 60 : 40}%, ${lineAlpha})`;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
+
+        // Connect node to mouse cursor if close
+        if (distMouse < mouse.radius) {
+          const cursorLineAlpha = (1 - distMouse / mouse.radius) * (isDark ? 0.28 : 0.18);
+          ctx.beginPath();
+          ctx.moveTo(n.x, n.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.strokeStyle = `hsla(168, 90%, ${isDark ? 55 : 38}%, ${cursorLineAlpha})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
       }
     };
-    
-    return cleanup;
+
+    render();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseleave', handleMouseLeave);
+      cancelAnimationFrame(animationFrameId);
+    };
   }, []);
 
-  return <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full -z-10" />;
+  return (
+    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      {/* Subtle geometric grid overlay */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-70" />
+
+      {/* Top & bottom ambient aurora glows */}
+      <div className="absolute -top-40 left-1/4 h-[420px] w-[420px] rounded-full bg-primary/15 blur-[130px] animate-pulse-slow" />
+      <div
+        className="absolute top-1/3 -right-32 h-[380px] w-[380px] rounded-full bg-accent/15 blur-[130px] animate-pulse-slow"
+        style={{ animationDelay: '3s' }}
+      />
+      <div className="absolute -bottom-40 left-1/3 h-[360px] w-[480px] rounded-full bg-teal-500/10 blur-[140px]" />
+
+      {/* Interactive constellation canvas */}
+      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+    </div>
+  );
 };
 
 export default AnimatedBackground;

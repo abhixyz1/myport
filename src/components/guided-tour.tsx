@@ -29,7 +29,6 @@ export default function GuidedTour() {
   const [displayState, setDisplayState] = useState<TourDisplayState>('closed');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
-  const [isGameActive, setIsGameActive] = useState(false);
 
   const pathname = usePathname();
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -113,29 +112,6 @@ export default function GuidedTour() {
       }, currentStep.autoAdvanceAfter);
     }
 
-    // Listener for a button click when a step awaits it.
-    if (currentStep.awaits === 'click') {
-      const targetId = currentStep.action?.pointTo;
-      if (!targetId) return;
-
-      const target = document.getElementById(targetId);
-      const listener = () => {
-        cleanup();
-
-        // Special case for the game: close tour window and wait for game completion.
-        if (targetId === 'begin-experiment-button') {
-          setDisplayState('closed');
-          // Set a long timeout, which will be cancelled by the 'gameCompleted' event.
-          timerRef.current = setTimeout(() => {
-            advanceTour();
-          }, 25000);
-        }
-      };
-
-      target?.addEventListener('click', listener, { once: true });
-      return () => target?.removeEventListener('click', listener);
-    }
-
     // Listener for a page navigation change.
     if (currentStep.awaits === 'path_change') {
       const targetId = currentStep.action?.pointTo;
@@ -187,32 +163,6 @@ export default function GuidedTour() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Effect to listen for game activity to hide the tour widget.
-  useEffect(() => {
-    const gameContainer = document.getElementById('quantum-conundrum-section');
-    if (!gameContainer) return;
-
-    // Use a MutationObserver to detect when the game modal becomes active.
-    const observer = new MutationObserver(mutations => {
-      for (let mutation of mutations) {
-        if (mutation.attributeName === 'class') {
-          const target = mutation.target as HTMLElement;
-          setIsGameActive(target.classList.contains('fixed'));
-        }
-      }
-    });
-    observer.observe(gameContainer, { attributes: true });
-
-    // Custom event listener to advance the tour once the game is finished.
-    const gameCompletedListener = () => advanceTour();
-    window.addEventListener('gameCompleted', gameCompletedListener);
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('gameCompleted', gameCompletedListener);
-    };
-  }, [advanceTour]);
-
   /** Closes the tour and marks it as completed in localStorage. */
   const handleClose = () => {
     cleanup();
@@ -228,7 +178,7 @@ export default function GuidedTour() {
     }
   };
 
-  if (status === 'inactive' || isGameActive) {
+  if (status === 'inactive') {
     return null;
   }
 

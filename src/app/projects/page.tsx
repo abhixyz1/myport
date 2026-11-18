@@ -1,53 +1,72 @@
 /**
  * @file src/app/projects/page.tsx
- * @description The dedicated page for showcasing all projects and contributions.
- *              This page provides a more comprehensive view than the "featured"
- *              section on the homepage.
+ * @description Dedicated page showcasing Muhammad Abhinaya's projects and repositories.
  */
-import AnimatedBackground from "@/components/animated-background";
-import PageFooter from "@/components/page-footer";
-import Projects from "@/components/projects";
+import PageFooter from '@/components/page-footer';
+import Projects from '@/components/projects';
+import { SpotlightCard } from '@/components/ui/spotlight-card';
+import { FolderGit2, Github, ArrowUpRight, Terminal } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import type { Metadata } from 'next';
 
-// Page-specific metadata for SEO.
 export const metadata: Metadata = {
-  title: 'All Projects & Contributions | Muhammad Abhinaya',
-  description: 'A complete list of Muhammad Abhinaya\'s open-source projects and contributions, including NEPHRA and Quantalink.',
-  // Provides the canonical URL for this page.
+  title: 'Projects & Repositories | Muhammad Abhinaya Zurfa',
+  description:
+    "Explore Muhammad Abhinaya Zurfa's web development, Information Systems, and Go backend projects on GitHub (@abhixyz1).",
   alternates: {
     canonical: '/projects',
   },
 };
 
-/**
- * ProjectsPage component that displays a complete list of all projects.
- * @returns {JSX.Element} The rendered projects page.
- */
 export default function ProjectsPage() {
   return (
-    <>
-      {/* The animated background is included here as well for a consistent look. */}
-      <AnimatedBackground />
-      {/* `relative z-10` ensures content is displayed above the background. */}
-      <div className="relative z-10 flex min-h-screen w-full flex-col items-center p-4 sm:p-6 lg:p-8">
-        <div className="w-full max-w-4xl flex-grow">
-          <header className="mb-8 pt-20 text-center">
-            <h1 className="text-4xl font-bold text-primary tracking-tight">
-              Projects & Contributions
-            </h1>
-          </header>
-
-          {/* An informational box providing context about the project timeline. */}
-          <div className="bg-card/30 border border-border/40 rounded-lg p-4 text-center text-sm text-foreground/70 mb-8 italic">
-            I started doing public projects from August 2024. All previous work isn’t recorded here. Projects shown here are on GitHub.
+    <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-5xl flex-grow pt-28 space-y-10">
+        {/* Page Header */}
+        <header className="text-center space-y-3 max-w-2xl mx-auto">
+          <div className="inline-flex items-center gap-2 rounded-full glass-pill px-3.5 py-1 font-mono text-xs text-primary">
+            <FolderGit2 className="h-3.5 w-3.5" />
+            <span>OPEN SOURCE &amp; LABS</span>
           </div>
+          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight">
+            Projects &amp; <span className="text-gradient">Contributions</span>
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+            A curated archive of web applications, Information Systems prototypes, and backend experiments in JavaScript, TypeScript, and Go.
+          </p>
+        </header>
 
-          {/* The Projects component is rendered here without the `featuredOnly` prop,
-              so it displays all projects from the data source. */}
-          <Projects />
-        </div>
-        <PageFooter />
+        {/* Context Banner */}
+        <SpotlightCard enableTilt={false} className="p-4 sm:p-5">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+            <div className="flex items-center gap-3">
+              <div className="hidden sm:flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/25 text-primary">
+                <Terminal className="h-5 w-5" />
+              </div>
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                Public repositories and active labs since <span className="text-foreground font-medium">August 2024</span>. More experiments and source code are hosted directly on my GitHub profile.
+              </p>
+            </div>
+            <a
+              href="https://github.com/abhixyz1"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0"
+            >
+              <Button variant="outline" size="sm" className="rounded-full glass-pill">
+                <Github className="mr-2 h-4 w-4 text-primary" />
+                @abhixyz1
+                <ArrowUpRight className="ml-1 h-3.5 w-3.5" />
+              </Button>
+            </a>
+          </div>
+        </SpotlightCard>
+
+        {/* Interactive Projects Grid with Category Filter */}
+        <Projects />
       </div>
-    </>
+
+      <PageFooter />
+    </div>
   );
 }

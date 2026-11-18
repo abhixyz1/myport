@@ -1,55 +1,41 @@
 /**
  * @file /src/lib/skills-data.tsx
- * @description This file contains the data for all technical skills, organized into categories.
- *              To add a new skill or category, modify the `skillsData` array.
- *              This structure makes it easy to render the skills page dynamically.
- * @note This file must have a `.tsx` extension because it imports and uses React components (icons).
+ * @description Categorized technical skills and tools for Muhammad Abhinaya Zurfa.
  */
 
-import { BrainCircuit, Code, Wrench, Languages } from 'lucide-react';
-import { PythonIcon } from '@/components/icons/python';
+import React from 'react';
+import { Code2, Server, Wrench } from 'lucide-react';
+import { JavascriptIcon } from '@/components/icons/javascript';
 import { TypescriptIcon } from '@/components/icons/typescript';
+import { GolangIcon } from '@/components/icons/golang';
+import { PythonIcon } from '@/components/icons/python';
 import { ReactIcon } from '@/components/icons/react';
+import { NextjsIcon } from '@/components/icons/nextdotjs';
+import { TailwindIcon } from '@/components/icons/tailwind';
+import { NodejsIcon } from '@/components/icons/nodejs';
 import { HtmlIcon } from '@/components/icons/html5';
 import { CssIcon } from '@/components/icons/css3';
-import { JavascriptIcon } from '@/components/icons/javascript';
-import { VscodeIcon } from '@/components/icons/vscode';
-import { ChatgptIcon } from '@/components/icons/chatgpt';
-import { GithubIcon } from '@/components/icons/github';
+import { SqliteIcon } from '@/components/icons/sqlite';
+import { DjangoIcon } from '@/components/icons/django';
+import { CIcon } from '@/components/icons/c';
 import { GitIcon } from '@/components/icons/git';
+import { GithubIcon } from '@/components/icons/github';
+import { VscodeIcon } from '@/components/icons/vscode';
 import { BashIcon } from '@/components/icons/bash';
 import { ZshIcon } from '@/components/icons/zsh';
-import { VercelIcon } from '@/components/icons/vercel';
 import { UbuntuIcon } from '@/components/icons/ubuntu';
-import { CIcon } from '@/components/icons/c';
-import { NumpyIcon } from '@/components/icons/numpy';
-import { PandasIcon } from '@/components/icons/pandas';
-import { SciktLearnIcon } from '@/components/icons/scikt-learn';
-import { SqliteIcon } from '@/components/icons/sqlite';
+import { VercelIcon } from '@/components/icons/vercel';
 import { GeminiIcon } from '@/components/icons/gemini';
-import { ArduinoIcon } from '@/components/icons/arduino';
-import { EspressifIcon } from '@/components/icons/espressif';
+import { ChatgptIcon } from '@/components/icons/chatgpt';
 
-/**
- * Defines the structure for an individual skill.
- * @property {string} name - The name of the skill (e.g., "Python").
- * @property {React.ReactNode} icon - The React component for the skill's logo.
- * @property {string} [iconClassName] - Optional CSS classes to apply to the icon container.
- */
 export interface Skill {
   name: string;
+  level?: string;
   icon: React.ReactNode;
   iconClassName?: string;
   isPriority?: boolean;
 }
 
-/**
- * Defines the structure for a category of skills.
- * @property {string} title - The title of the category (e.g., "Frontend Development").
- * @property {React.ReactNode} icon - The icon representing the category.
- * @property {string} [subtitle] - An optional subtitle to display under the category title.
- * @property {Skill[]} skills - An array of `Skill` objects belonging to this category.
- */
 export interface SkillCategory {
   title: string;
   icon: React.ReactNode;
@@ -57,49 +43,51 @@ export interface SkillCategory {
   skills: Skill[];
 }
 
-/**
- * Data for all technical skills, organized by category.
- */
 export const skillsData: SkillCategory[] = [
   {
-    title: 'Core Languages',
-    icon: <Languages size={32} />,
-    subtitle: "The foundational languages I use for problem-solving and building projects.",
+    title: 'Core Languages & Backend',
+    icon: <Server size={28} />,
+    subtitle:
+      'Languages and server-side technologies I use to architect reliable APIs, backend logic, and data-driven systems.',
     skills: [
-      { name: 'C', icon: <CIcon />, isPriority: true },
-      { name: 'Python', icon: <PythonIcon />, isPriority: true },
-      { name: 'JS / TS', icon: <TypescriptIcon />, iconClassName: 'p-1' },
+      { name: 'JavaScript', level: 'Primary', icon: <JavascriptIcon />, isPriority: true },
+      { name: 'TypeScript', level: 'Primary', icon: <TypescriptIcon />, iconClassName: 'p-0.5', isPriority: true },
+      { name: 'Go (Golang)', level: 'Exploring', icon: <GolangIcon />, isPriority: true },
+      { name: 'Node.js', level: 'Backend', icon: <NodejsIcon />, isPriority: true },
+      { name: 'Python', level: 'Scripting', icon: <PythonIcon /> },
+      { name: 'SQL / SQLite', level: 'Database', icon: <SqliteIcon /> },
+      { name: 'C', level: 'Fundamentals', icon: <CIcon /> },
     ],
   },
   {
-    title: 'Web & Data Technologies',
-    icon: <Code size={32} />,
-    subtitle: 'Technologies I use for web projects and data analysis',
+    title: 'Modern Web & Frontend',
+    icon: <Code2 size={28} />,
+    subtitle:
+      'Frameworks and UI technologies I use to craft responsive, smooth, and interactive web applications.',
     skills: [
-      { name: 'HTML/CSS', icon: <HtmlIcon /> },
-      { name: 'React', icon: <ReactIcon /> },
-      { name: 'NumPy', icon: <NumpyIcon /> },
-      { name: 'Pandas', icon: <PandasIcon /> },
-      { name: 'Scikit-learn', icon: <SciktLearnIcon /> },
-      { name: 'SQLite', icon: <SqliteIcon /> },
+      { name: 'Next.js', level: 'App Router', icon: <NextjsIcon />, isPriority: true },
+      { name: 'React', level: 'UI Library', icon: <ReactIcon />, isPriority: true },
+      { name: 'Tailwind CSS', level: 'Styling', icon: <TailwindIcon />, isPriority: true },
+      { name: 'HTML5', level: 'Semantic Web', icon: <HtmlIcon /> },
+      { name: 'CSS3', level: 'Animations', icon: <CssIcon /> },
+      { name: 'Django', level: 'Web Framework', icon: <DjangoIcon /> },
     ],
   },
   {
-    title: 'Tools & Platforms',
-    icon: <Wrench size={32} />,
-    subtitle: 'The ecosystem of tools and platforms that support my development workflow.',
+    title: 'Developer Tools & Workflow',
+    icon: <Wrench size={28} />,
+    subtitle:
+      'The daily environment, version control, Linux shell, and AI-assisted tools powering my engineering workflow.',
     skills: [
-       { name: 'Git', icon: <GitIcon /> },
-       { name: 'GitHub', icon: <GithubIcon /> },
-       { name: 'VS Code', icon: <VscodeIcon /> },
-       { name: 'ChatGPT', icon: <ChatgptIcon /> },
-       { name: 'Gemini', icon: <GeminiIcon /> },
-       { name: 'Bash', icon: <BashIcon /> },
-       { name: 'Zsh', icon: <ZshIcon /> },
-       { name: 'Ubuntu', icon: <UbuntuIcon /> },
-       { name: 'Vercel', icon: <VercelIcon /> },
-       { name: 'Arduino', icon: <ArduinoIcon /> },
-       { name: 'ESP32/ESP8266', icon: <EspressifIcon /> },
+      { name: 'Git', level: 'VCS', icon: <GitIcon />, isPriority: true },
+      { name: 'GitHub', level: 'Collaboration', icon: <GithubIcon />, isPriority: true },
+      { name: 'VS Code', level: 'Editor', icon: <VscodeIcon /> },
+      { name: 'Ubuntu Linux', level: 'OS', icon: <UbuntuIcon /> },
+      { name: 'Zsh', level: 'Shell', icon: <ZshIcon /> },
+      { name: 'Bash', level: 'Scripting', icon: <BashIcon /> },
+      { name: 'Vercel', level: 'Deployment', icon: <VercelIcon /> },
+      { name: 'Gemini', level: 'AI Pair', icon: <GeminiIcon /> },
+      { name: 'ChatGPT', level: 'AI Workflow', icon: <ChatgptIcon /> },
     ],
   },
 ];

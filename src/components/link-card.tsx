@@ -1,93 +1,131 @@
 /**
  * @file src/components/link-card.tsx
- * @description A single, interactive card component for displaying a link.
- *              It features a 3D tilt effect on hover, a glowing background, and an icon.
- * @note This is a client component because it uses `useRef` for direct DOM manipulation
- *       to achieve the interactive hover effects.
+ * @description Interactive 3D spring-tilted social/contact card with real-time cursor spotlight.
  */
-"use client"
+"use client";
 
 import React, { useRef } from 'react';
+import {
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from 'framer-motion';
 import type { LucideIcon } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-/**
- * Props for the LinkCard component.
- */
-interface LinkCardProps {
+export interface LinkCardProps {
   href: string;
   title: string;
-  Icon: LucideIcon | React.ComponentType<React.SVGProps<SVGSVGElement>>; // Accept both types
-  delay: number; // Animation delay for the fade-in effect.
-  isVisible: boolean; // Flag from the parent to trigger the animation.
+  handle?: string;
+  badge?: string;
+  accentColor?: string;
+  Icon: LucideIcon | React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  delay?: number;
+  isVisible?: boolean;
+  className?: string;
 }
 
-/**
- * LinkCard is a visually interactive anchor tag styled as a card.
- * @param {LinkCardProps} props - The props for the component.
- * @returns {JSX.Element} An interactive anchor tag.
- */
-export default function LinkCard({ href, title, Icon, delay, isVisible }: LinkCardProps) {
+export default function LinkCard({
+  href,
+  title,
+  handle,
+  badge,
+  accentColor = 'rgba(20, 225, 195, 0.22)',
+  Icon,
+  delay = 0,
+  className,
+}: LinkCardProps) {
   const cardRef = useRef<HTMLAnchorElement>(null);
 
-  /**
-   * Handles the mouse move event to create a 3D tilt and glow effect.
-   * @param {React.MouseEvent<HTMLAnchorElement>} e - The mouse event.
-   */
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const normX = useMotionValue(0);
+  const normY = useMotionValue(0);
+
+  const springConfig = { stiffness: 300, damping: 22, mass: 0.5 };
+  const rotateX = useSpring(useTransform(normY, [-0.5, 0.5], [8, -8]), springConfig);
+  const rotateY = useSpring(useTransform(normX, [-0.5, 0.5], [-8, 8]), springConfig);
+
   const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!cardRef.current) return;
-    const { clientX, clientY, currentTarget } = e;
-    const { left, top, width, height } = currentTarget.getBoundingClientRect();
-    
-    // Calculate mouse position relative to the card center.
-    const x = clientX - left;
-    const y = clientY - top;
-    const rotateX = (y / height - 0.5) * -20; // Tilt up/down.
-    const rotateY = (x / width - 0.5) * 20;   // Tilt left/right.
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
 
-    // Apply the 3D transform for the tilt effect.
-    cardRef.current.style.transform = `perspective(2000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.08, 1.08, 1.08)`;
-    
-    // Update CSS custom properties for the background glow position.
-    cardRef.current.style.setProperty('--glow-x', `${x}px`);
-    cardRef.current.style.setProperty('--glow-y', `${y}px`);
-    cardRef.current.classList.add('is-hovering');
+    mouseX.set(x);
+    mouseY.set(y);
+    normX.set(x / rect.width - 0.5);
+    normY.set(y / rect.height - 0.5);
   };
 
-  /**
-   * Resets the card's transform when the mouse leaves.
-   */
   const handleMouseLeave = () => {
-    if (!cardRef.current) return;
-    cardRef.current.style.transform = 'perspective(2000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
-    cardRef.current.classList.remove('is-hovering');
+    normX.set(0);
+    normY.set(0);
   };
+
+  const spotlight = useMotionTemplate`radial-gradient(260px circle at ${mouseX}px ${mouseY}px, ${accentColor}, transparent 80%)`;
 
   return (
-    <a
+    <motion.a
       ref={cardRef}
       href={href}
-      target="_blank" // Open link in a new tab.
+      target={href.startsWith('mailto:') ? '_self' : '_blank'}
       rel="noopener noreferrer"
-      className={cn(
-        "group relative flex items-center justify-center w-full p-4 h-16 rounded-xl bg-card/30 border border-border/40 shadow-lg transition-all duration-700 ease-out",
-        "hover:border-primary/70 hover:shadow-[0_0_60px_-15px_hsl(var(--primary)/0.5)]",
-        "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background",
-        "overflow-hidden",
-        // The ::before pseudo-element creates the radial glow effect. Its position is controlled by CSS variables.
-        "before:absolute before:w-56 before:h-56 before:left-[var(--glow-x)] before:top-[var(--glow-y)] before:-translate-x-1/2 before:-translate-y-1/2 before:bg-primary/20 before:blur-3xl before:opacity-0 before:transition-opacity before:duration-500",
-        "is-hovering:before:opacity-100", // The glow becomes visible on hover.
-        // Trigger fade-in animation when the card becomes visible in the viewport.
-        isVisible ? "animate-fade-in-up" : "opacity-0"
-      )}
-      style={{ animationDelay: `${delay}ms`, transitionProperty: 'transform, box-shadow, border-color' }}
+      initial={{ opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-30px' }}
+      transition={{ duration: 0.45, delay: delay / 1000 }}
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: 'preserve-3d',
+      }}
+      whileHover={{ scale: 1.02, y: -3 }}
+      whileTap={{ scale: 0.98 }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      className={cn(
+        'group relative flex items-center justify-between gap-3 rounded-2xl p-4 glass-card transition-colors duration-300',
+        'hover:border-primary/50 hover:shadow-[0_10px_40px_-15px_hsl(var(--primary)/0.35)]',
+        'focus:outline-none focus:ring-2 focus:ring-ring overflow-hidden',
+        className
+      )}
     >
-      <Icon className="absolute left-4 h-6 w-6 text-foreground/60 transition-colors group-hover:text-primary" />
-      <span className="font-medium text-foreground transition-colors group-hover:text-primary">
-        {title}
-      </span>
-    </a>
+      {/* Cursor-tracking radial spotlight */}
+      <motion.div
+        className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{ background: spotlight }}
+      />
+
+      <div className="relative z-10 flex items-center gap-3.5 min-w-0">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 text-foreground/80 group-hover:text-primary group-hover:scale-110 group-hover:bg-primary/15 transition-all duration-300">
+          <Icon className="h-5 w-5" />
+        </div>
+        <div className="min-w-0 text-left">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors">
+              {title}
+            </span>
+            {badge && (
+              <span className="rounded-full bg-primary/10 border border-primary/20 px-2 py-0.5 font-mono text-[10px] text-primary">
+                {badge}
+              </span>
+            )}
+          </div>
+          {handle && (
+            <p className="truncate font-mono text-xs text-muted-foreground group-hover:text-foreground/80 transition-colors">
+              {handle}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div className="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-background/40 border border-border/60 text-muted-foreground group-hover:border-primary/40 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
+        <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+      </div>
+    </motion.a>
   );
 }
