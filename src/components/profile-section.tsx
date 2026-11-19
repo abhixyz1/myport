@@ -138,7 +138,7 @@ export default function ProfileSection() {
           {/* Signature Tagline Pill */}
           <div className="pt-1 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
             <span className="inline-flex items-center gap-1.5 rounded-full glass-pill px-3 py-1 font-mono text-[11px] text-foreground/80">
-              &ldquo;Hated, ignored, undefeated.&rdquo;
+              &ldquo;Liquor, Ladies, Leverage.&rdquo;
             </span>
             <span className="inline-flex items-center gap-1 rounded-full glass-pill px-3 py-1">
               <GraduationCap className="h-3.5 w-3.5 text-primary" />

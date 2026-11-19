@@ -85,7 +85,7 @@ export default function InteractiveTerminal() {
       case 'motto':
         output = (
           <p className="text-teal-300 italic font-medium">
-            &ldquo;Hated, ignored, undefeated.&rdquo; ⚡
+            &ldquo;Liquor, Ladies, Leverage.&rdquo; ⚡
           </p>
         );
         break;
@@ -104,7 +104,7 @@ export default function InteractiveTerminal() {
     const text =
       activeTab === 'go'
         ? `package main\n\nimport "fmt"\n\ntype Developer struct {\n    Name       string\n    University string\n    Role       string\n    Focus      []string\n}\n\nfunc main() {\n    abhi := Developer{\n        Name:       "Muhammad Abhinaya Zurfa",\n        University: "Politeknik Negeri Malang",\n        Role:       "Web & Backend Engineer",\n        Focus:      []string{"JavaScript", "TypeScript", "Go", "Next.js"},\n    }\n    fmt.Printf("Ready to build: %+v\\n", abhi)\n}`
-        : `export const developerProfile = {\n  name: "Muhammad Abhinaya Zurfa",\n  handle: "@abhixyz1",\n  education: {\n    institution: "Politeknik Negeri Malang (Polinema)",\n    major: "Information Systems",\n  },\n  interests: ["Web Architecture", "Backend Systems", "Golang", "Full-Stack JS"],\n  motto: "Hated, ignored, undefeated",\n  status: "Open to collaboration & exciting projects",\n} as const;`;
+        : `export const developerProfile = {\n  name: "Muhammad Abhinaya Zurfa",\n  handle: "@abhixyz1",\n  education: {\n    institution: "Politeknik Negeri Malang (Polinema)",\n    major: "Information Systems",\n  },\n  interests: ["Web Architecture", "Backend Systems", "Golang", "Full-Stack JS"],\n  motto: "Liquor, Ladies, Leverage.",\n  status: "Open to collaboration & exciting projects",\n} as const;`;
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 1800);
@@ -280,7 +280,7 @@ export default function InteractiveTerminal() {
               <div className="pl-4">
                 motto:{' '}
                 <span className="text-teal-300">
-                  &apos;Hated, ignored, undefeated&apos;
+                  &apos;Liquor, Ladies, Leverage. &apos;
                 </span>
                 ,
               </div>
