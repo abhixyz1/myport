@@ -167,7 +167,7 @@ export default function AboutPage() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
             <div className="space-y-1.5">
               <p className="font-mono text-xs text-primary">
-                &ldquo;Hated, ignored, undefeated.&rdquo;
+                &ldquo;Liquor, Ladies, Leverage.&rdquo;
               </p>
               <h3 className="text-xl sm:text-2xl font-bold text-foreground">
                 Want to see what I&apos;ve been building?
