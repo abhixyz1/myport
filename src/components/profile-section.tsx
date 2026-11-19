@@ -24,10 +24,12 @@ import {
 
 const ROLES = [
   'Web & Backend Developer',
-  'Information Systems @ Polinema',
+  'Information Systems @ Politeknik Negeri Malang',
   'JavaScript & TypeScript Builder',
   'Exploring Go (Golang) & APIs',
 ];
+
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 export default function ProfileSection() {
   const [roleIndex, setRoleIndex] = useState(0);
@@ -80,7 +82,7 @@ export default function ProfileSection() {
           <div className="relative rounded-full p-1 bg-gradient-to-tr from-primary via-teal-400/50 to-accent">
             <Avatar className="h-28 w-28 md:h-32 md:w-32 border-4 border-background shadow-2xl transition-transform duration-500 group-hover:scale-[1.03]">
               <AvatarImage
-                src="/profile.webp"
+                src={`${BASE_PATH}/profile.webp`}
                 alt="Muhammad Abhinaya Zurfa Profile Picture"
                 className="object-cover"
               />

@@ -22,7 +22,7 @@ import { Button } from '@/components/ui/button';
 export const metadata: Metadata = {
   title: 'About Muhammad Abhinaya Zurfa | Journey & Engineering Focus',
   description:
-    'Learn more about Muhammad Abhinaya Zurfa — Information Systems student at Politeknik Negeri Malang (Polinema) passionate about web development, backend engineering, JavaScript, and Go.',
+    'Learn more about Muhammad Abhinaya Zurfa — Information Systems student at Politeknik Negeri Malang passionate about web development, backend engineering, JavaScript, and Go.',
   alternates: {
     canonical: '/about',
   },

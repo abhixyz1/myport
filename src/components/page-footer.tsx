@@ -28,7 +28,7 @@ export default function PageFooter() {
           </span>
           <span className="hidden md:inline text-border">·</span>
           <span className="hidden md:inline font-mono text-[11px] text-primary">
-            Polinema · Information Systems
+            Politeknik Negeri Malang · Information Systems
           </span>
         </div>
 

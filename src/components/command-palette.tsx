@@ -59,7 +59,7 @@ export default function CommandPalette() {
       {
         id: 'nav-about',
         label: 'About Muhammad Abhinaya',
-        subtitle: 'Education at Polinema, background & engineering focus',
+        subtitle: 'Education at Politeknik Negeri Malang, background & engineering focus',
         category: 'Navigation',
         icon: <User className="h-4 w-4" />,
         action: () => router.push('/about'),
