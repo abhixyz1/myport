@@ -5,7 +5,7 @@ export default {
   output: 'export',
   images: { unoptimized: true },
   basePath,
-  assetPrefix: isProd ? '/myport/' : '',
+  assetPrefix: basePath,
   env: {
     NEXT_PUBLIC_BASE_PATH: basePath,
   },

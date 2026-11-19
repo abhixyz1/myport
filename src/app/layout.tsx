@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://abhixyz1.github.io/myport'),
   title: 'Muhammad Abhinaya Zurfa | Web & Backend Developer',
   description:
-    'Personal developer portfolio of Muhammad Abhinaya Zurfa — Information Systems student at Politeknik Negeri Malang (Polinema), building modern web applications and backend systems with JavaScript, TypeScript, and Go.',
+    'Personal developer portfolio of Muhammad Abhinaya Zurfa — Information Systems student at Politeknik Negeri Malang, building modern web applications and backend systems with JavaScript, TypeScript, and Go.',
   keywords: [
     'Muhammad Abhinaya',
     'Muhammad Abhinaya Zurfa',

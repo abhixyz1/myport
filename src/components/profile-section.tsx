@@ -7,7 +7,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import Image from 'next/image';
+import profileImg from '../../public/profile.webp';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useThemeContext } from './theme-provider';
@@ -28,8 +29,6 @@ const ROLES = [
   'JavaScript & TypeScript Builder',
   'Exploring Go (Golang) & APIs',
 ];
-
-const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 export default function ProfileSection() {
   const [roleIndex, setRoleIndex] = useState(0);
@@ -80,16 +79,16 @@ export default function ProfileSection() {
         >
           <div className="absolute -inset-2 rounded-full bg-gradient-to-tr from-primary via-teal-400 to-accent opacity-55 blur-xl transition-all duration-500 group-hover:opacity-95 group-hover:blur-2xl group-hover:scale-105" />
           <div className="relative rounded-full p-1 bg-gradient-to-tr from-primary via-teal-400/50 to-accent">
-            <Avatar className="h-28 w-28 md:h-32 md:w-32 border-4 border-background shadow-2xl transition-transform duration-500 group-hover:scale-[1.03]">
-              <AvatarImage
-                src={`${BASE_PATH}/profile.webp`}
+            <div className="relative h-28 w-28 md:h-32 md:w-32 rounded-full overflow-hidden border-4 border-background shadow-2xl transition-transform duration-500 group-hover:scale-[1.03] bg-card">
+              <Image
+                src={profileImg}
                 alt="Muhammad Abhinaya Zurfa Profile Picture"
+                fill
+                priority
+                sizes="(max-width: 768px) 112px, 128px"
                 className="object-cover"
               />
-              <AvatarFallback className="bg-card text-primary font-bold text-2xl font-mono">
-                MAZ
-              </AvatarFallback>
-            </Avatar>
+            </div>
           </div>
           {/* Floating Verified Code Badge */}
           <div
